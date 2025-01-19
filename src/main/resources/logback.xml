@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- src/main/resources/logback.xml 或 logback-spring.xml -->
+<configuration>
+    <!-- 定义ConsoleAppender用于控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 设置PatternLayout，用于格式化日志信息 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 格式化字符串，解释如下：
+                 %d：日期和时间
+                 %thread：当前线程名
+                 %-5level：日志级别，左对齐，宽度为5个字符
+                 %logger{36}：Logger名称，最长36个字符，超过则省略
+                 %msg：日志消息
+                 %C{0}：类全名，%L：行号，需要配合log4j.appender.XXX.loggerFactory配置使用
+                 %X{customField}：MDC中的自定义字段customField
+                 %n: 换行符
+             -->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%-5level][%C{0}:%L][%X{traceId:-}][%X{userId:-}][%X{transactionId:-}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 文件输出配置 -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件路径 -->
+        <file>logs/log.log</file>
+
+        <!-- 使用SizeAndTimeBasedRollingPolicy实现按时间和大小分割 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 文件名格式，包含日期及索引 -->
+            <fileNamePattern>logs/log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!-- 每个归档文件的最大大小 -->
+            <maxFileSize>1024MB</maxFileSize>
+
+            <!-- 保留一定天数的日志文件 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%-5level][%C{0}:%L][%X{traceId:-}][%X{userId:-}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 将该appender添加到root logger -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ROLLING_FILE" />
+    </root>
+</configuration>

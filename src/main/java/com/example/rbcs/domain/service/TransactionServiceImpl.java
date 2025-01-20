@@ -75,9 +75,9 @@ public class TransactionServiceImpl implements TransactionService {
                 eventPublisher.publishEvent(new TransactionCompletedEvent(transaction));
             });
         } catch (DomainException e) {
+            log.error("[{}]Transaction Failed", transaction.getId(), e);
             transaction.fail(e.getMessage());
             defers.deferOnTransactionComplete(() -> {
-                log.info("[{}]Transaction Completed: {}", transaction.getId(), transaction);
                 eventPublisher.publishEvent(new TransactionFailedEvent(transaction));
             });
         }

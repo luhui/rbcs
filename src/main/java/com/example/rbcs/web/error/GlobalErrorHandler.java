@@ -10,6 +10,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,7 +28,7 @@ import java.io.PrintStream;
 @Slf4j
 @ControllerAdvice
 public class GlobalErrorHandler {
-    @ExceptionHandler(value = {DomainException.class, IllegalArgumentException.class})
+    @ExceptionHandler(value = {DomainException.class, IllegalArgumentException.class, HttpMessageNotReadableException.class})
     public ResponseEntity<CommonErrorResponse> handleDomainException(Exception ex, WebRequest request) {
         log.error("[{}]Exception occurred: {}", request.getDescription(false), getExceptionAllInformation(ex));
         var status = HttpStatus.BAD_REQUEST;

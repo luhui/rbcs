@@ -47,4 +47,4 @@ spring:
   cloud:
     aws:
       sqs:
-        enabled: true
+        enabled: false

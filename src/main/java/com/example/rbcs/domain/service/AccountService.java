@@ -13,9 +13,9 @@ public interface AccountService {
     
     void defreezeAccount(Long id);
 
-    void validateAccount(String accountNumber);
+    void validateAccount(Long accountId);
 
-    List<Account> getValidAccounts(List<String> accountNumber);
+    List<Account> getValidAccounts(List<Long> accountIds);
 
-    Account getValidAccount(String accountNumber);
+    Account getValidAccount(Long accountId);
 }

@@ -36,18 +36,18 @@ public class TransactionController {
         log.info("Creating transaction: {}", transactionForm);
         return switch (transactionForm.getType()) {
             case WITHDRAWAL -> transactionMapper.toResponse(
-                    transactionService.createWithdrawTransaction(transactionForm.getSourceAccountNo(), transactionForm.getAmount()));
+                    transactionService.createWithdrawTransaction(transactionForm.getSourceAccountId(), transactionForm.getAmount()));
             case DEPOSIT -> transactionMapper.toResponse(
-                    transactionService.createDepositTransaction(transactionForm.getSourceAccountNo(), transactionForm.getAmount()));
+                    transactionService.createDepositTransaction(transactionForm.getSourceAccountId(), transactionForm.getAmount()));
             case TRANSFER -> {
-                if (!StringUtils.hasText(transactionForm.getDestinationAccountNo())) {
-                    throw new IllegalArgumentException("Destination account number is required for transfer");
+                if (transactionForm.getDestinationAccountId() == null) {
+                    throw new IllegalArgumentException("Destination account id is required for transfer");
                 }
-                if (Objects.equals(transactionForm.getSourceAccountNo(), transactionForm.getDestinationAccountNo())) {
-                    throw new IllegalArgumentException("Source and destination account numbers cannot be the same");
+                if (Objects.equals(transactionForm.getSourceAccountId(), transactionForm.getDestinationAccountId())) {
+                    throw new IllegalArgumentException("Source and destination account id cannot be the same");
                 }
                 yield transactionMapper.toResponse(
-                        transactionService.createTransferTransaction(transactionForm.getSourceAccountNo(), transactionForm.getDestinationAccountNo(), transactionForm.getAmount()));
+                        transactionService.createTransferTransaction(transactionForm.getSourceAccountId(), transactionForm.getDestinationAccountId(), transactionForm.getAmount()));
             }
         };
     }

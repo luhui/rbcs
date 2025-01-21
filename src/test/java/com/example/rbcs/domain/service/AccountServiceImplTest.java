@@ -56,36 +56,36 @@ class AccountServiceImplTest {
 
     @Test
     void validateAccount_shouldPass_whenAccountExistsAndActive() {
-        accountService.validateAccount(activeAccount.getAccountNumber());
+        accountService.validateAccount(activeAccount.getId());
     }
 
     @Test
     void validateAccount_shouldThrowException_whenAccountNotFound() {
-        assertThatThrownBy(() -> accountService.validateAccount("98173821789"))
+        assertThatThrownBy(() -> accountService.validateAccount(12349889L))
             .isInstanceOf(AccountNotFoundException.class);
     }
 
     @Test
     void validateAccount_shouldThrowException_whenAccountNotActive() {
-        assertThatThrownBy(() -> accountService.validateAccount(frozenAccount.getAccountNumber()))
+        assertThatThrownBy(() -> accountService.validateAccount(frozenAccount.getId()))
             .isInstanceOf(AccountStatusInvalid.class);
     }
 
     @Test
     void getValidAccounts_shouldThrowException_whenOneInvalid() {
-        assertThatThrownBy(() -> accountService.getValidAccounts(Arrays.asList(activeAccount.getAccountNumber(), frozenAccount.getAccountNumber())))
+        assertThatThrownBy(() -> accountService.getValidAccounts(Arrays.asList(activeAccount.getId(), frozenAccount.getId())))
             .isInstanceOf(AccountStatusInvalid.class);
     }
 
     @Test
     void getValidAccounts_shouldThrowException_whenSomeAccountsNotFound() {
-        assertThatThrownBy(() -> accountService.getValidAccounts(Arrays.asList(activeAccount.getAccountNumber(), "999999")))
+        assertThatThrownBy(() -> accountService.getValidAccounts(Arrays.asList(activeAccount.getId(), 999999L)))
             .isInstanceOf(AccountNotFoundException.class);
     }
 
     @Test
     void getValidAccount_shouldReturnAccount_whenExistsAndActive() {
-        Account result = accountService.getValidAccount(activeAccount.getAccountNumber());
+        Account result = accountService.getValidAccount(activeAccount.getId());
 
         assertThat(result.getId()).isEqualTo(activeAccount.getId());
     }

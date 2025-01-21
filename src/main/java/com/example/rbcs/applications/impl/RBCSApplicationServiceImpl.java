@@ -57,14 +57,14 @@ public class RBCSApplicationServiceImpl implements AccountApplicationService, Tr
     }
 
     @Override
-    public Transaction createTransferTransaction(String fromAccountNo, String toAccountNo, Long amount) {
+    public Transaction createTransferTransaction(Long fromAccountId, Long toAccountId, Long amount) {
         Account source = null;
         Account target = null;
-        final var accounts = accountService.getValidAccounts(Stream.of(fromAccountNo, toAccountNo).filter(Objects::nonNull).toList());
+        final var accounts = accountService.getValidAccounts(Stream.of(fromAccountId, toAccountId).filter(Objects::nonNull).toList());
         for (Account account : accounts) {
-            if (Objects.equals(account.getAccountNumber(), fromAccountNo)) {
+            if (Objects.equals(account.getId(), fromAccountId)) {
                 source = account;
-            } else if (Objects.equals(account.getAccountNumber(), toAccountNo)) {
+            } else if (Objects.equals(account.getId(), toAccountId)) {
                 target = account;
             }
         }
@@ -73,13 +73,13 @@ public class RBCSApplicationServiceImpl implements AccountApplicationService, Tr
     }
 
     @Override
-    public Transaction createWithdrawTransaction(String accountNo, Long amount) {
-        return transactionService.createTransaction(accountService.getValidAccount(accountNo), null, Transaction.Type.WITHDRAWAL, amount);
+    public Transaction createWithdrawTransaction(Long accountId, Long amount) {
+        return transactionService.createTransaction(accountService.getValidAccount(accountId), null, Transaction.Type.WITHDRAWAL, amount);
     }
 
     @Override
-    public Transaction createDepositTransaction(String accountNo, Long amount) {
-        return transactionService.createTransaction(accountService.getValidAccount(accountNo), null, Transaction.Type.DEPOSIT, amount);
+    public Transaction createDepositTransaction(Long accountId, Long amount) {
+        return transactionService.createTransaction(accountService.getValidAccount(accountId), null, Transaction.Type.DEPOSIT, amount);
     }
 
     @EventListener

@@ -67,8 +67,8 @@ class TransactionControllerIntegrationTest {
 
     private TransactionResponse createTransaction(Transaction.Type type, long amount) throws InterruptedException {
         var form = new TransactionForm();
-        form.setSourceAccountNo(sourceAccount.getAccountNumber());
-        form.setDestinationAccountNo(destinationAccount.getAccountNumber());
+        form.setSourceAccountId(sourceAccount.getId());
+        form.setDestinationAccountId(destinationAccount.getId());
         form.setType(type);
         form.setAmount(amount);
         var res = restTemplate.postForEntity("/api/v1/transactions", form, TransactionResponse.class);
@@ -175,8 +175,8 @@ class TransactionControllerIntegrationTest {
 
         // Act
         var form = new TransactionForm();
-        form.setSourceAccountNo(sourceAccount.getAccountNumber());
-        form.setDestinationAccountNo("9999999999"); // 不存在的账户
+        form.setSourceAccountId(sourceAccount.getId());
+        form.setDestinationAccountId(9999999999L); // 不存在的账户
         form.setType(Transaction.Type.TRANSFER);
         form.setAmount(200L);
         ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/transactions", form, String.class);
@@ -193,13 +193,13 @@ class TransactionControllerIntegrationTest {
 
         // Act
         var form = new TransactionForm();
-        form.setSourceAccountNo(sourceAccount.getAccountNumber());
+        form.setSourceAccountId(sourceAccount.getId());
         form.setType(Transaction.Type.TRANSFER);
         form.setAmount(200L);
         ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/transactions", form, String.class);
 
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("Destination account number is required for transfer");
+        assertThat(response.getBody()).contains("Destination account id is required for transfer");
     }
 }

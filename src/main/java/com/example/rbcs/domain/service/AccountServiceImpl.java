@@ -31,15 +31,15 @@ public class AccountServiceImpl implements AccountService {
     AccountServiceImpl self;
 
     @Override
-    public void validateAccount(String accountNumber) {
-        final var account = getAccount(accountNumber);
+    public void validateAccount(Long accountId) {
+        final var account = getAccount(accountId);
         account.assertActivateStatus();
     }
 
     @Override
-    public List<Account> getValidAccounts(List<String> accountNumber) {
-        final var accounts = accountRepository.findByAccountNumberIn(accountNumber);
-        if (accounts.size() != accountNumber.size()) {
+    public List<Account> getValidAccounts(List<Long> accountIds) {
+        final var accounts = accountRepository.findAllById(accountIds);
+        if (accounts.size() != accountIds.size()) {
             throw new AccountNotFoundException();
         }
         for (Account account : accounts) {
@@ -49,8 +49,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getValidAccount(String accountNumber) {
-        final var account = getAccount(accountNumber);
+    public Account getValidAccount(Long accountId) {
+        final var account = getAccount(accountId);
         account.assertActivateStatus();
         return account;
     }
@@ -90,8 +90,8 @@ public class AccountServiceImpl implements AccountService {
         });
     }
 
-    private Account getAccount(String accountNumber) {
-        return accountRepository.findByAccountNumber(accountNumber).orElseThrow(AccountNotFoundException::new);
+    private Account getAccount(Long accountId) {
+        return accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
     }
 
     /**

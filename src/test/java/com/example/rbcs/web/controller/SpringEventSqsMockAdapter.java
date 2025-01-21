@@ -2,12 +2,15 @@ package com.example.rbcs.web.controller;
 
 import com.example.rbcs.domain.event.TransactionCreatedEvent;
 import com.example.rbcs.domain.event.TransactionExecuteRequest;
+import io.awspring.cloud.sqs.operations.SqsTemplate;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
@@ -19,6 +22,8 @@ import java.util.UUID;
 public class SpringEventSqsMockAdapter {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+    @MockitoBean
+    private SqsTemplate sqsTemplate;
 
     @EventListener
     @Async

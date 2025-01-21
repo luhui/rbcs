@@ -12,12 +12,12 @@ public class TransactionForm {
     /**
      * 交易账号主体
      */
-    @NotBlank(message = "Source account number is required")
-    private String sourceAccountNo;
+    @NotNull(message = "Source account id is required")
+    private Long sourceAccountId;
     /**
-     * 收款账号，当且仅当交易类型为转账时有效，且不能为空
+     * 收款账号Id，当且仅当交易类型为转账时有效，且不能为空
      */
-    private String destinationAccountNo;
+    private Long destinationAccountId;
     /**
      * 交易类型，不能为空
      */

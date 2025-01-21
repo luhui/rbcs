@@ -15,7 +15,7 @@
                  %X{customField}：MDC中的自定义字段customField
                  %n: 换行符
              -->
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%-5level][%C{0}:%L][%X{traceId:-}][%X{userId:-}][%X{transactionId:-}] %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%-5level][%C{0}:%L][%X{traceId:-}][%X{transactionId:-}] %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -37,7 +37,7 @@
         </rollingPolicy>
 
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%-5level][%C{0}:%L][%X{traceId:-}][%X{userId:-}] %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%-5level][%C{0}:%L][%X{traceId:-}][%X{transactionId:-}] %msg%n</pattern>
         </encoder>
     </appender>
 

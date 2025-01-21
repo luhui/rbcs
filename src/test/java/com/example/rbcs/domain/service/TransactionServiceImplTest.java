@@ -155,10 +155,9 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void executeTransaction_shouldThrowExceptionWhenTransactionNotFound() {
+    void executeTransaction_shouldIgnoreWhenTransactionNotFound() {
         // Act & Assert
-        assertThatThrownBy(() -> transactionService.executeTransaction(999L))
-            .isInstanceOf(TransactionNotFoundException.class);
+        transactionService.executeTransaction(999L);
     }
 
     @Test

@@ -7,10 +7,17 @@ import io.awspring.cloud.sqs.operations.SqsTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import software.amazon.awssdk.services.sqs.model.Message;
+import software.amazon.awssdk.services.sqs.model.MessageAttributeValue;
+
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 /**
  * 事件适配器，把 spring 事件转换成 SQS 事件，SQS 事件再转换成spring  event
@@ -24,16 +31,22 @@ public class SpringEventSqsAdapter {
     private final EventQueuesProperties eventQueuesProperties;
     private final ApplicationEventPublisher eventPublisher;
 
+    @ConditionalOnProperty(name = "spring.cloud.aws.sqs.enabled", havingValue = "true", matchIfMissing = true)
     @EventListener
-    @Async
     public void handle(TransactionCreatedEvent event) {
-        // 这里可以添加一些前置处理
-        eventPublisher.publishEvent(new TransactionExecuteRequest(event.getAggregateRoot().getId()));
-        sqsTemplate.send(to -> to.queue(eventQueuesProperties.getTransactionExecutionQueue()).payload(event.getAggregateRoot().getId()));
+        var traceId = MDC.get("traceId");
+        if (!StringUtils.hasText(traceId)) {
+            traceId = UUID.randomUUID().toString().replaceAll("-", "");
+        }
+        final var finalTraceId = traceId;
+        sqsTemplate.send(to -> to.queue(eventQueuesProperties.getTransactionExecutionQueue()).header("x-traceid", finalTraceId).payload(event.getAggregateRoot().getId()));
     }
 
     @SqsListener("${events.queues.transaction-execution-queue}")
-    public void handle(String transactionId) {
+    public void handle(Message message) {
+        var transactionId = message.body();
+        final var traceId = message.messageAttributes().getOrDefault("x-traceid", MessageAttributeValue.builder().stringValue(UUID.randomUUID().toString().replaceAll("-", "")).build()).stringValue();
+        MDC.put("traceId", traceId);
         MDC.put("transactionId", transactionId);
         log.info("receive transaction execution request");
         eventPublisher.publishEvent(new TransactionExecuteRequest(Long.parseLong(transactionId)));

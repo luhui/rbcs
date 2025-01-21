@@ -11,6 +11,7 @@ import com.example.rbcs.web.controller.response.TransactionResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -18,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,6 +50,7 @@ class TransactionControllerIntegrationTest {
     public void setup() {
         sourceAccount = createAccount("1234567890");
         destinationAccount = createAccount("1122334455");
+        MDC.put("x-trace-id", UUID.randomUUID().toString().replaceAll("-", ""));
     }
 
     private AccountResponse createAccount(String accountNo) {

@@ -83,7 +83,12 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Retryable(maxAttempts = 3)
     public void executeTransaction(long transactionId) {
-        final var transaction = transactionRepository.findById(transactionId).orElseThrow(TransactionNotFoundException::new);
+        final var transactionOptional = transactionRepository.findById(transactionId);
+        if (transactionOptional.isEmpty()) {
+            log.warn("transaction not found, ignore execution");
+            return;
+        }
+        final var transaction = transactionOptional.get();
         final var source = transaction.getSourceAccount();
         final var target = transaction.getTargetAccount();
         final var sourceLock =redissonClient.getLock("t:a:" + source.getId());
@@ -109,7 +114,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRES_NEW)
     @Retryable(maxAttempts = 3)
     public void doExecuteTransaction(long transactionId) {
-        final var transaction = transactionRepository.findById(transactionId).orElseThrow(TransactionNotFoundException::new);
+        final var transactionOptional = transactionRepository.findById(transactionId);
+        if (transactionOptional.isEmpty()) {
+            log.warn("transaction not found, ignore execution");
+            return;
+        }
+        final var transaction = transactionOptional.get();
         try {
             transaction.execute();
             defers.deferOnTransactionComplete(() -> {

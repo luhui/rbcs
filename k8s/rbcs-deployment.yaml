@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rbcs
+  labels:
+    app: rbcs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rbcs
+  template:
+    metadata:
+      labels:
+        app: rbcs
+    spec:
+      containers:
+      - name: rbcs
+        image: rbcs:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10

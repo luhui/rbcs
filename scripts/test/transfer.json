@@ -1,0 +1,6 @@
+{
+  "type": "TRANSFER",
+  "fromAccountId": "1",
+  "toAccountId": "2",
+  "amount": 25.00
+}

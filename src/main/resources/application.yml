@@ -42,10 +42,14 @@ spring:
   cloud:
     aws:
       sqs:
-        enabled: false
+        enabled: true
   redis:
     redisson:
       file: classpath:redisson.yaml
 logging:
   level:
     org.hibernate.cache: debug
+    io.awspring.cloud: debug
+events:
+  queues:
+    transaction-execution-queue: transaction-execution-queue

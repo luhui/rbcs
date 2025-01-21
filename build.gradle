@@ -73,13 +73,13 @@ allprojects {
         // AWS dependencies
         implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:${springCloudAwsVersion}")
         implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
+        implementation 'io.awspring.cloud:spring-cloud-aws-starter'
         
         // Test dependencies
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testImplementation 'org.springframework.integration:spring-integration-test'
         testImplementation 'org.assertj:assertj-core:3.24.2'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-        runtimeOnly 'com.h2database:h2'
+        testRuntimeOnly 'com.h2database:h2'
     }
 
     tasks.named('test') {

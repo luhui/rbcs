@@ -5,6 +5,7 @@ import com.example.rbcs.applications.TransactionApplicationService;
 import com.example.rbcs.domain.entity.Account;
 import com.example.rbcs.domain.entity.Transaction;
 import com.example.rbcs.domain.event.TransactionCreatedEvent;
+import com.example.rbcs.domain.event.TransactionExecuteRequest;
 import com.example.rbcs.domain.exception.AccountNotFoundException;
 import com.example.rbcs.domain.repository.AccountRepository;
 import com.example.rbcs.domain.service.AccountService;
@@ -81,10 +82,8 @@ public class RBCSApplicationServiceImpl implements AccountApplicationService, Tr
         return transactionService.createTransaction(accountService.getValidAccount(accountNo), null, Transaction.Type.DEPOSIT, amount);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
-    public void onTransactionCreated(TransactionCreatedEvent event) {
-        final var transaction = event.getAggregateRoot();
-        transactionService.executeTransaction(transaction.getId());
+    public void onTransactionCreated(TransactionExecuteRequest request) {
+        transactionService.executeTransaction(request.transactionId());
     }
 }

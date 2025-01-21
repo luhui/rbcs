@@ -8,9 +8,9 @@ spring:
   application:
     name: "rbcs"
   datasource:
-    url: jdbc:mysql://localhost:3306/rbcs?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
-    username: root
-    password: root
+    url: ${ENV_DB_URL:jdbc:mysql://rbcs.cpo6kk6wy8v9.ap-northeast-1.rds.amazonaws.com/rbcs?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false}
+    username: ${ENV_DB_USERNAME:root}
+    password: ${ENV_DB_PASSWORD:rbcsadmin}
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -36,9 +36,6 @@ spring:
     open-in-view: false
     show-sql: true
     database: mysql
-  data:
-    redis:
-      host: localhost
   cloud:
     aws:
       sqs:
@@ -48,8 +45,8 @@ spring:
       file: classpath:redisson.yaml
 logging:
   level:
-    org.hibernate.cache: debug
-    io.awspring.cloud: debug
+    org.hibernate.cache: info
+    io.awspring.cloud: info
 events:
   queues:
     transaction-execution-queue: transaction-execution-queue

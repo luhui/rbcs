@@ -71,12 +71,41 @@ class AccountControllerIntegrationTest {
     }
 
     @Test
+    void getAccountByNo_success() {
+        // Arrange
+        Long accountId = setupAccountId;
+
+        // Act
+        ResponseEntity<AccountResponse> response = restTemplate.getForEntity(
+                "/api/v1/accounts?accountNo={accountNo}", AccountResponse.class, "1234567");
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        AccountResponse accountResponse = response.getBody();
+        assertThat(accountResponse.getId()).isEqualTo(accountId);
+        assertThat(accountResponse.getAccountNumber()).isEqualTo("1234567");
+        assertThat(accountResponse.getStatus()).isEqualTo("INITIAL");
+        assertThat(accountResponse.getBalance()).isZero();
+    }
+
+    @Test
     void getAccount_NotExist_shouldReturn404() {
         // Arrange
         Long accountId = 999L; // Assuming this ID does not exist
 
         // Act & Assert
         ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/accounts/{id}", String.class, accountId);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void getAccountByNo_NotExist_shouldReturn404() {
+
+        // Act & Assert
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/accounts?accountNo={accountNo}", String.class, "accountNotExist");
 
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);

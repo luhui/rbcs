@@ -23,6 +23,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        cache:
+          use_query_cache: true
+          use_second_level_cache: true
+          region:
+            factory_class: org.redisson.hibernate.RedissonRegionFactory
+          redisson:
+            fallback: true
+            config: redisson.yaml
     open-in-view: false
     show-sql: true
     database: mysql
@@ -33,3 +43,6 @@ spring:
     aws:
       sqs:
         enabled: false
+  redis:
+    redisson:
+      file: classpath:redisson.yaml

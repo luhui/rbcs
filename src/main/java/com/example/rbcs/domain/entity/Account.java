@@ -1,14 +1,15 @@
 package com.example.rbcs.domain.entity;
 
+import com.example.rbcs.domain.exception.AccountStatusInvalid;
 import com.example.rbcs.domain.exception.AmountInvalidException;
+import com.example.rbcs.domain.exception.InsufficientBalanceException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import com.example.rbcs.domain.exception.InsufficientBalanceException;
-import com.example.rbcs.domain.exception.AccountStatusInvalid;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -23,6 +24,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
+@Cacheable
+@org.hibernate.annotations.Cache(region = "AccountRegion", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Account {
 
     @Id

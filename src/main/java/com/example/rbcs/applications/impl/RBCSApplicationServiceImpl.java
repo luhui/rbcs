@@ -4,29 +4,36 @@ import com.example.rbcs.applications.AccountApplicationService;
 import com.example.rbcs.applications.TransactionApplicationService;
 import com.example.rbcs.domain.entity.Account;
 import com.example.rbcs.domain.entity.Transaction;
-import com.example.rbcs.domain.event.TransactionCreatedEvent;
 import com.example.rbcs.domain.event.TransactionExecuteRequest;
 import com.example.rbcs.domain.exception.AccountNotFoundException;
 import com.example.rbcs.domain.repository.AccountRepository;
+import com.example.rbcs.domain.repository.TransactionRepository;
 import com.example.rbcs.domain.service.AccountService;
 import com.example.rbcs.domain.service.TransactionService;
+import com.example.rbcs.infrastructure.sqs.SqsPublisher;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RedissonClient;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RBCSApplicationServiceImpl implements AccountApplicationService, TransactionApplicationService {
     private final TransactionService transactionService;
     private final AccountService accountService;
     private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
+    private final RedissonClient redissonClient;
+    private final SqsPublisher sqsPublisher;
     @Override
     public Account createAccount(String accountNumber) {
         final var acc = Account.builder()
@@ -85,5 +92,25 @@ public class RBCSApplicationServiceImpl implements AccountApplicationService, Tr
     @EventListener
     public void onTransactionCreated(TransactionExecuteRequest request) {
         transactionService.executeTransaction(request.transactionId());
+    }
+
+    /**
+     * 每小时执行一次，获取一个小时前的1000条还处于pending的交易，重新执行
+     */
+    @Scheduled(cron = "0 0 * * * ?")
+    public void executePendingTransactions() {
+        var lock = redissonClient.getLock("pending-transactions-re-execute");
+        try {
+            if (lock.tryLock(1, 600, TimeUnit.SECONDS)) {
+                Date dateHourBefore = new Date(System.currentTimeMillis() - 1000 * 60 * 60);
+                var transactions = transactionRepository.findAllByStatusAndCreatedAtLessThanEqual(Transaction.Status.PENDING, dateHourBefore, PageRequest.of(0, 1000));
+                log.info("Executing {} pending transactions on scheduler", transactions.size());
+                transactions.forEach(transaction -> sqsPublisher.publish(transaction.getId()));
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
+        }
     }
 }

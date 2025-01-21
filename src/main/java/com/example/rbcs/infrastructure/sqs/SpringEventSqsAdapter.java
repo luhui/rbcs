@@ -27,19 +27,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class SpringEventSqsAdapter {
-    private final SqsTemplate sqsTemplate;
-    private final EventQueuesProperties eventQueuesProperties;
+    private final SqsPublisher sqsPublisher;
     private final ApplicationEventPublisher eventPublisher;
 
     @ConditionalOnProperty(name = "spring.cloud.aws.sqs.enabled", havingValue = "true", matchIfMissing = true)
     @EventListener
     public void handle(TransactionCreatedEvent event) {
-        var traceId = MDC.get("traceId");
-        if (!StringUtils.hasText(traceId)) {
-            traceId = UUID.randomUUID().toString().replaceAll("-", "");
-        }
-        final var finalTraceId = traceId;
-        sqsTemplate.send(to -> to.queue(eventQueuesProperties.getTransactionExecutionQueue()).header("x-traceid", finalTraceId).payload(event.getAggregateRoot().getId()));
+        sqsPublisher.publish(event.getAggregateRoot().getId());
     }
 
     @SqsListener("${events.queues.transaction-execution-queue}")

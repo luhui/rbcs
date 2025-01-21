@@ -28,6 +28,9 @@ import java.util.Objects;
 @NoArgsConstructor
 @Slf4j
 @org.hibernate.annotations.Cache(region = "RBCS", usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(indexes = {
+        @Index(name = "idx_transaction_status", columnList = "status")
+})
 public class Transaction extends AbstractAggregateRoot<Transaction> {
 
     @Id

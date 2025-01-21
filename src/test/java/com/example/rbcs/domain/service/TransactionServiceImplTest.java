@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -87,6 +88,11 @@ class TransactionServiceImplTest {
 
         Optional<Transaction> savedTransaction = transactionRepository.findById(transaction.getId());
         assertThat(savedTransaction).isPresent();
+        assertThat(savedTransaction.get().getStatus()).isEqualTo(Transaction.Status.PENDING);
+        assertThat(savedTransaction.get().getSourceAccount().getId()).isEqualTo(sourceAccount.getId());
+        assertThat(savedTransaction.get().getTargetAccount().getId()).isEqualTo(targetAccount.getId());
+        assertThat(savedTransaction.get().getType()).isEqualTo(Transaction.Type.TRANSFER);
+        assertThat(savedTransaction.get().getAmount()).isEqualTo(100L);
     }
 
     @Test
@@ -143,6 +149,9 @@ class TransactionServiceImplTest {
         Optional<Transaction> executedTransaction = transactionRepository.findById(transaction.getId());
         assertThat(executedTransaction).isPresent();
         assertThat(executedTransaction.get().getStatus()).isEqualTo(Transaction.Status.COMPLETED);
+        var sourceAccount = accountRepository.findById(this.sourceAccount.getId());
+        assertThat(sourceAccount.isPresent()).isTrue();
+        assertThat(sourceAccount.get().getBalance()).isEqualTo(1100);
     }
 
     @Test
@@ -175,12 +184,12 @@ class TransactionServiceImplTest {
 
         latch.await(); // 等待所有线程执行完毕
         executorService.shutdown();
-        var sourceAccount = accountRepository.findById(this.sourceAccount.getId());
 
         // Assert
         Optional<Transaction> executedTransaction = transactionRepository.findById(transaction.getId());
         assertThat(executedTransaction).isPresent();
         assertThat(executedTransaction.get().getStatus()).isEqualTo(Transaction.Status.COMPLETED);
+        var sourceAccount = accountRepository.findById(this.sourceAccount.getId());
         assertThat(sourceAccount.isPresent()).isTrue();
         assertThat(sourceAccount.get().getBalance()).isEqualTo(1100);
     }
@@ -248,6 +257,40 @@ class TransactionServiceImplTest {
         Optional<Transaction> executedTransaction = transactionRepository.findById(transaction.getId());
         assertThat(executedTransaction).isPresent();
         assertThat(executedTransaction.get().getStatus()).isEqualTo(Transaction.Status.COMPLETED);
+        assertThat(sourceAccount.isPresent()).isTrue();
+        assertThat(sourceAccount.get().getBalance()).isEqualTo(900);
+        assertThat(targetAccount.isPresent()).isTrue();
+        assertThat(targetAccount.get().getBalance()).isEqualTo(600);
+    }
+
+    @Test
+    void executeTransaction_concurrencyCreateTransferTransaction() throws InterruptedException {
+        // Arrange
+        int threadCount = 100;
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+
+        // Act
+        for (int i = 0; i < threadCount; i++) {
+            executorService.submit(() -> {
+                try {
+                    final var transaction = transactionService.createTransaction(sourceAccount, targetAccount, Transaction.Type.TRANSFER, 1L);
+                    transactionService.executeTransaction(transaction.getId());
+                } catch (Exception e) {
+                    System.err.println("Error: " + e.getMessage());
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await(); // 等待所有线程执行完毕
+        executorService.shutdown();
+        var sourceAccount = accountRepository.findById(this.sourceAccount.getId());
+        var targetAccount = accountRepository.findById(this.targetAccount.getId());
+
+        // Assert
         assertThat(sourceAccount.isPresent()).isTrue();
         assertThat(sourceAccount.get().getBalance()).isEqualTo(900);
         assertThat(targetAccount.isPresent()).isTrue();

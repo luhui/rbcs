@@ -44,6 +44,6 @@ public class AccountController {
 
     @PutMapping("/{id}/status/unfreeze")
     public void unfreezeAccount(@PathVariable Long id) {
-        accountService.unfreezeAccount(id);
+        accountService.defreezeAccount(id);
     }
 }

@@ -1,175 +1,188 @@
 package com.example.rbcs.domain.service;
 
 import com.example.rbcs.domain.entity.Account;
+import com.example.rbcs.domain.entity.Transaction;
 import com.example.rbcs.domain.exception.AccountNotFoundException;
 import com.example.rbcs.domain.exception.AccountStatusInvalid;
 import com.example.rbcs.domain.repository.AccountRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
 class AccountServiceImplTest {
 
-    @Mock
+    @Autowired
     private AccountRepository accountRepository;
 
-    @InjectMocks
+    @Autowired
     private AccountServiceImpl accountService;
 
     private Account activeAccount;
     private Account frozenAccount;
 
+    @AfterEach
+    public void tearDown() {
+        accountRepository.deleteAllInBatch();
+    }
+
     @BeforeEach
     void setUp() {
         activeAccount = new Account();
-        activeAccount.setId(1L);
         activeAccount.setAccountNumber("123456");
         activeAccount.setStatus(Account.Status.ACTIVATED);
+        accountRepository.save(activeAccount);
 
         frozenAccount = new Account();
-        frozenAccount.setId(2L);
         frozenAccount.setAccountNumber("654321");
         frozenAccount.setStatus(Account.Status.FROZEN);
+        accountRepository.save(frozenAccount);
     }
 
     @Test
     void validateAccount_shouldPass_whenAccountExistsAndActive() {
-        when(accountRepository.findByAccountNumber("123456"))
-            .thenReturn(Optional.of(activeAccount));
-
-        accountService.validateAccount("123456");
-
-        verify(accountRepository).findByAccountNumber("123456");
+        accountService.validateAccount(activeAccount.getAccountNumber());
     }
 
     @Test
     void validateAccount_shouldThrowException_whenAccountNotFound() {
-        when(accountRepository.findByAccountNumber("123456"))
-            .thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> accountService.validateAccount("123456"))
+        assertThatThrownBy(() -> accountService.validateAccount("98173821789"))
             .isInstanceOf(AccountNotFoundException.class);
-
-        verify(accountRepository).findByAccountNumber("123456");
     }
 
     @Test
     void validateAccount_shouldThrowException_whenAccountNotActive() {
-        when(accountRepository.findByAccountNumber("654321"))
-            .thenReturn(Optional.of(frozenAccount));
-
-        assertThatThrownBy(() -> accountService.validateAccount("654321"))
+        assertThatThrownBy(() -> accountService.validateAccount(frozenAccount.getAccountNumber()))
             .isInstanceOf(AccountStatusInvalid.class);
-
-        verify(accountRepository).findByAccountNumber("654321");
     }
 
     @Test
-    void getValidAccounts_shouldReturnAccounts_whenAllExistAndActive() {
-        when(accountRepository.findByAccountNumberIn(Arrays.asList("123456", "654321")))
-            .thenReturn(Arrays.asList(activeAccount, frozenAccount));
-
-        assertThatThrownBy(() -> accountService.getValidAccounts(Arrays.asList("123456", "654321")))
+    void getValidAccounts_shouldThrowException_whenOneInvalid() {
+        assertThatThrownBy(() -> accountService.getValidAccounts(Arrays.asList(activeAccount.getAccountNumber(), frozenAccount.getAccountNumber())))
             .isInstanceOf(AccountStatusInvalid.class);
-
-        verify(accountRepository).findByAccountNumberIn(Arrays.asList("123456", "654321"));
     }
 
     @Test
     void getValidAccounts_shouldThrowException_whenSomeAccountsNotFound() {
-        when(accountRepository.findByAccountNumberIn(Arrays.asList("123456", "999999")))
-            .thenReturn(Collections.singletonList(activeAccount));
-
-        assertThatThrownBy(() -> accountService.getValidAccounts(Arrays.asList("123456", "999999")))
+        assertThatThrownBy(() -> accountService.getValidAccounts(Arrays.asList(activeAccount.getAccountNumber(), "999999")))
             .isInstanceOf(AccountNotFoundException.class);
-
-        verify(accountRepository).findByAccountNumberIn(Arrays.asList("123456", "999999"));
     }
 
     @Test
     void getValidAccount_shouldReturnAccount_whenExistsAndActive() {
-        when(accountRepository.findByAccountNumber("123456"))
-            .thenReturn(Optional.of(activeAccount));
+        Account result = accountService.getValidAccount(activeAccount.getAccountNumber());
 
-        Account result = accountService.getValidAccount("123456");
-
-        assertThat(result).isEqualTo(activeAccount);
-        verify(accountRepository).findByAccountNumber("123456");
+        assertThat(result.getId()).isEqualTo(activeAccount.getId());
     }
 
     @Test
     void createAccount_shouldSaveNewAccount() {
-        when(accountRepository.save(any(Account.class))).thenReturn(activeAccount);
+        Account result = accountService.createAccount("99987123");
 
-        Account result = accountService.createAccount("123456");
-
-        assertThat(result.getAccountNumber()).isEqualTo("123456");
-        verify(accountRepository).save(any(Account.class));
+        assertThat(result.getAccountNumber()).isEqualTo("99987123");
     }
 
     @Test
     void activateAccount_shouldActivateAccount() {
-        Account initialAccount = new Account();
-        initialAccount.setId(1L);
-        initialAccount.setStatus(Account.Status.INITIAL);
+        var initialAccount = new Account();
+        initialAccount.setAccountNumber("123456789");
+        accountRepository.save(initialAccount);
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(initialAccount));
-        when(accountRepository.save(any(Account.class))).thenReturn(initialAccount);
+        accountService.activateAccount(initialAccount.getId());
 
-        accountService.activateAccount(1L);
-
-        assertThat(initialAccount.getStatus()).isEqualTo(Account.Status.ACTIVATED);
-        verify(accountRepository).findById(1L);
-        verify(accountRepository).save(initialAccount);
+        final var acc = accountRepository.findById(initialAccount.getId());
+        assertThat(acc.isPresent()).isTrue();
+        assertThat(acc.get().getStatus()).isEqualTo(Account.Status.ACTIVATED);
     }
 
     @Test
     void activateAccount_shouldThrowException_whenAccountNotFound() {
-        when(accountRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> accountService.activateAccount(1L))
+        assertThatThrownBy(() -> accountService.activateAccount(9999L))
             .isInstanceOf(AccountNotFoundException.class)
-            .hasMessageContaining("Account not found with id: 1");
-
-        verify(accountRepository).findById(1L);
-        verify(accountRepository, never()).save(any());
+            .hasMessageContaining("Account not found with id: 9999");
     }
 
     @Test
     void freezeAccount_shouldFreezeAccount() {
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(activeAccount));
-        when(accountRepository.save(any(Account.class))).thenReturn(activeAccount);
+        accountService.freezeAccount(activeAccount.getId());
 
-        accountService.freezeAccount(1L);
-
-        assertThat(activeAccount.getStatus()).isEqualTo(Account.Status.FROZEN);
-        verify(accountRepository).findById(1L);
-        verify(accountRepository).save(activeAccount);
+        final var acc = accountRepository.findById(activeAccount.getId());
+        assertThat(acc.isPresent()).isTrue();
+        assertThat(acc.get().getStatus()).isEqualTo(Account.Status.FROZEN);
     }
 
     @Test
     void unfreezeAccount_shouldUnfreezeAccount() {
-        when(accountRepository.findById(2L)).thenReturn(Optional.of(frozenAccount));
-        when(accountRepository.save(any(Account.class))).thenReturn(frozenAccount);
+        accountService.defreezeAccount(frozenAccount.getId());
 
-        accountService.unfreezeAccount(2L);
+        final var acc = accountRepository.findById(frozenAccount.getId());
+        assertThat(acc.isPresent()).isTrue();
+        assertThat(acc.get().getStatus()).isEqualTo(Account.Status.ACTIVATED);
+    }
 
-        assertThat(frozenAccount.getStatus()).isEqualTo(Account.Status.ACTIVATED);
-        verify(accountRepository).findById(2L);
-        verify(accountRepository).save(frozenAccount);
+    /**
+     * 并发测试冻结账户：
+     * activate是幂等的，因此并发执行若干次，在中间插入一个冻结操作，最终账户应该被冻结。
+     * 如果没有加锁，有概率会覆盖掉冻结的结果
+     * 因为从冻结->激活需要解冻的操作，通过激活接口状态不可逆
+     */
+    @Test
+    @RepeatedTest(5)
+    void concurrentTest_freezeAccount_shouldBeFreezeAccount() throws InterruptedException {
+        // Arrange
+
+        var initialAccount = new Account();
+        initialAccount.setAccountNumber("123456789");
+        accountRepository.save(initialAccount);
+
+        int threadCount = 100;
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+
+        // Act
+        for (int i = 0; i < threadCount-1; i++) {
+            executorService.submit(() -> {
+                try {
+                    accountService.activateAccount(initialAccount.getId());
+                } catch (Exception e) {
+                    System.err.println("Error: " + e.getMessage());
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        executorService.submit(() -> {
+            try {
+                accountService.freezeAccount(initialAccount.getId());
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        latch.await(); // 等待所有线程执行完毕
+        executorService.shutdown();
+
+        // Assert
+        final var acc = accountRepository.findById(initialAccount.getId());
+        assertThat(acc.isPresent()).isTrue();
+        assertThat(acc.get().getStatus()).isEqualTo(Account.Status.FROZEN);
     }
 }

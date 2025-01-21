@@ -11,7 +11,7 @@ public interface AccountService {
     
     void freezeAccount(Long id);
     
-    void unfreezeAccount(Long id);
+    void defreezeAccount(Long id);
 
     void validateAccount(String accountNumber);
 

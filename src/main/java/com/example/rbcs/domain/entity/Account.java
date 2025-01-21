@@ -25,7 +25,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Slf4j
 @Cacheable
-@org.hibernate.annotations.Cache(region = "AccountRegion", usage = CacheConcurrencyStrategy.READ_WRITE)
+// IMPORTANT: 二级缓存的region不能与entity名称相同，否则会导致class cast exception @see https://github.com/Kims-DeveloperGroup/hibernate-arcus/issues/1
+@org.hibernate.annotations.Cache(region = "RBCS", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Account {
 
     @Id

@@ -46,3 +46,6 @@ spring:
   redis:
     redisson:
       file: classpath:redisson.yaml
+logging:
+  level:
+    org.hibernate.cache: debug

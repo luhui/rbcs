@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: rbcs
-        image: rbcs:latest
+        image: 255170271587.dkr.ecr.ap-northeast-1.amazonaws.com/luhui/rbcs:latest
         ports:
         - containerPort: 8080
         resources:
@@ -38,3 +38,42 @@ spec:
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: rds-config
+              key: host
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: rds-config
+              key: port
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: rds-config
+              key: dbname
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: rds-credentials
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rds-credentials
+              key: password
+        - name: AWS_REGION
+          value: ap-northeast-1
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: access_key_id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: secret_access_key
+        imagePullPolicy: Always

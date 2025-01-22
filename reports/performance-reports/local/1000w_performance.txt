@@ -1,0 +1,44 @@
+开始执行场景：deposit 的性能测试...
+Running 10s test @ http://localhost:8080
+  10 threads and 50 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.23s     1.56s    6.95s    77.25%
+    Req/Sec    22.77     20.69    80.00     68.89%
+  377 requests in 10.08s, 98.65KB read
+  Non-2xx or 3xx responses: 136
+Requests/sec:     37.41
+Transfer/sec:      9.79KB
+场景：deposit 的性能测试完成。
+开始执行场景：deposit 的性能测试...
+Running 10s test @ http://localhost:8080
+  10 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.71s     1.67s    7.06s    86.25%
+    Req/Sec    21.26     22.29    90.00     85.81%
+  421 requests in 10.08s, 108.03KB read
+  Non-2xx or 3xx responses: 236
+Requests/sec:     41.78
+Transfer/sec:     10.72KB
+场景：deposit 的性能测试完成。
+开始执行场景：deposit 的性能测试...
+Running 10s test @ http://localhost:8080
+  10 threads and 300 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.92s     1.88s    6.76s    60.41%
+    Req/Sec    38.74     36.83   202.00     77.04%
+  914 requests in 10.09s, 227.04KB read
+  Non-2xx or 3xx responses: 679
+Requests/sec:     90.59
+Transfer/sec:     22.50KB
+场景：deposit 的性能测试完成。
+开始执行场景：deposit 的性能测试...
+Running 10s test @ http://localhost:8080
+  30 threads and 300 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     3.76s     1.86s    7.85s    62.79%
+    Req/Sec     8.85     15.15    90.00     90.26%
+  516 requests in 10.10s, 125.72KB read
+  Non-2xx or 3xx responses: 433
+Requests/sec:     51.08
+Transfer/sec:     12.44KB
+场景：deposit 的性能测试完成。

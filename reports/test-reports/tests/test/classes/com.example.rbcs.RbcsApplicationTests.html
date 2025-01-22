@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - RbcsApplicationTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>RbcsApplicationTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.example.rbcs.html">com.example.rbcs</a> &gt; RbcsApplicationTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.012s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">contextLoads()</td>
+<td class="success">0.012s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>[2025-01-22 01:47:42.693][Test worker][INFO ][AnnotationConfigContextLoaderUtils:83][][] Could not detect default configuration classes for test class [com.example.rbcs.RbcsApplicationTests]: RbcsApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[2025-01-22 01:47:42.740][Test worker][INFO ][SpringBootTestContextBootstrapper:234][][] Found @SpringBootConfiguration com.example.rbcs.RbcsApplication for test class com.example.rbcs.RbcsApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.1)
+
+[2025-01-22 01:47:42.902][background-preinit][INFO ][Version:21][][] HV000001: Hibernate Validator 8.0.2.Final
+[2025-01-22 01:47:42.919][Test worker][INFO ][StartupInfoLogger:53][][] Starting RbcsApplicationTests using Java 17.0.13 with PID 86948 (started by luffy in /Users/luffy/coding/server/rbcs)
+[2025-01-22 01:47:42.919][Test worker][INFO ][SpringApplication:658][][] The following 1 profile is active: &quot;test&quot;
+[2025-01-22 01:47:43.213][Test worker][INFO ][RepositoryConfigurationDelegate:295][][] Multiple Spring Data modules found, entering strict repository configuration mode
+[2025-01-22 01:47:43.214][Test worker][INFO ][RepositoryConfigurationDelegate:143][][] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[2025-01-22 01:47:43.319][Test worker][INFO ][RepositoryConfigurationDelegate:211][][] Finished Spring Data repository scanning in 100 ms. Found 2 JPA repository interfaces.
+[2025-01-22 01:47:43.326][Test worker][INFO ][RepositoryConfigurationDelegate:295][][] Multiple Spring Data modules found, entering strict repository configuration mode
+[2025-01-22 01:47:43.327][Test worker][INFO ][RepositoryConfigurationDelegate:143][][] Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+[2025-01-22 01:47:43.334][Test worker][INFO ][RepositoryConfigurationExtensionSupport:327][][] Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.rbcs.domain.repository.AccountRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+[2025-01-22 01:47:43.335][Test worker][INFO ][RepositoryConfigurationExtensionSupport:327][][] Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.rbcs.domain.repository.TransactionRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+[2025-01-22 01:47:43.335][Test worker][INFO ][RepositoryConfigurationDelegate:211][][] Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+[2025-01-22 01:47:43.518][Test worker][INFO ][LogHelper:31][][] HHH000204: Processing PersistenceUnitInfo [name: default]
+[2025-01-22 01:47:43.538][Test worker][INFO ][Version:44][][] HHH000412: Hibernate ORM core version 6.6.4.Final
+[2025-01-22 01:47:43.550][Test worker][INFO ][RegionFactoryInitiator:53][][] HHH000025: Second-level cache region factory [org.redisson.hibernate.RedissonRegionFactory]
+[2025-01-22 01:47:43.652][Test worker][INFO ][SpringPersistenceUnitInfo:87][][] No LoadTimeWeaver setup: ignoring JPA class transformer
+[2025-01-22 01:47:43.663][Test worker][WARN ][HikariConfig:1095][][] HikariPool-1 - idleTimeout has been set but has no effect because the pool is operating as a fixed size pool.
+[2025-01-22 01:47:43.664][Test worker][INFO ][HikariDataSource:109][][] HikariPool-1 - Starting...
+[2025-01-22 01:47:43.744][Test worker][INFO ][HikariPool:554][][] HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=ROOT
+[2025-01-22 01:47:43.746][Test worker][INFO ][HikariDataSource:122][][] HikariPool-1 - Start completed.
+[2025-01-22 01:47:43.755][Test worker][WARN ][DialectFactoryImpl:153][][] HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+[2025-01-22 01:47:43.765][Test worker][INFO ][JdbcEnvironmentInitiator:157][][] HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+[2025-01-22 01:47:43.984][Test worker][INFO ][Version:43][][] Redisson 3.43.0
+[2025-01-22 01:47:44.013][Test worker][WARN ][DnsServerAddressStreamProviders:70][][] Can not find io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider in the classpath, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'
+[2025-01-22 01:47:44.100][redisson-netty-1-4][INFO ][ConnectionsHolder:132][][] 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+[2025-01-22 01:47:44.148][redisson-netty-1-19][INFO ][ConnectionsHolder:132][][] 24 connections initialized for 127.0.0.1/127.0.0.1:6379
+[2025-01-22 01:47:44.447][Test worker][INFO ][JtaPlatformInitiator:59][][] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: create table account (id bigint generated by default as identity, account_number varchar(255) not null, balance bigint, created_at timestamp(6), status enum ('ACTIVATED','FROZEN','INITIAL'), updated_at timestamp(6), version integer, primary key (id))
+Hibernate: create table transaction (id bigint generated by default as identity, amount bigint not null, created_at timestamp(6), failure_reason varchar(255), status enum ('CANCELLED','COMPLETED','FAILED','PENDING','ROLLBACK'), type enum ('DEPOSIT','TRANSFER','WITHDRAWAL'), updated_at timestamp(6), version integer, source_account_id bigint, target_account_id bigint, primary key (id))
+Hibernate: alter table if exists account drop constraint if exists UK66gkcp94endmotfwb8r4ocxm9
+Hibernate: alter table if exists account add constraint UK66gkcp94endmotfwb8r4ocxm9 unique (account_number)
+Hibernate: create index idx_transaction_status on transaction (status)
+Hibernate: alter table if exists transaction add constraint FK25e716ukpqahttjt6c487lrer foreign key (source_account_id) references account
+Hibernate: alter table if exists transaction add constraint FKmj1os7uxmi54buhn6tvro5i6j foreign key (target_account_id) references account
+[2025-01-22 01:47:44.473][Test worker][INFO ][AbstractEntityManagerFactoryBean:447][][] Initialized JPA EntityManagerFactory for persistence unit 'default'
+[2025-01-22 01:47:44.627][Test worker][INFO ][Version:43][][] Redisson 3.43.0
+[2025-01-22 01:47:44.631][redisson-netty-5-4][INFO ][ConnectionsHolder:132][][] 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+[2025-01-22 01:47:44.667][redisson-netty-5-19][INFO ][ConnectionsHolder:132][][] 24 connections initialized for 127.0.0.1/127.0.0.1:6379
+[2025-01-22 01:47:45.500][Test worker][INFO ][H2ConsoleAutoConfiguration$H2ConsoleLogger:130][][] H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+[2025-01-22 01:47:45.550][Test worker][INFO ][StartupInfoLogger:59][][] Started RbcsApplicationTests in 2.75 seconds (process running for 3.282)
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.11.1</a> at 2025年1月22日 上午1:48:35</p>
+</div>
+</div>
+</body>
+</html>

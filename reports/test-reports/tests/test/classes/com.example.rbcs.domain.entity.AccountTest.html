@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - AccountTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>AccountTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.example.rbcs.domain.entity.html">com.example.rbcs.domain.entity</a> &gt; AccountTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">18</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.037s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">activate_shouldChangeStatusToActivated_whenAccountIsInitial()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">activate_shouldThrowException_whenAccountIsNotInitial()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">canWithdraw_shouldReturnFalse_whenBalanceIsInsufficient()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">canWithdraw_shouldReturnTrue_whenBalanceIsSufficient()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">canWithdraw_shouldThrowException_whenAmountIsInvalid()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deFreeze_shouldChangeStatusToActivated_whenAccountIsFrozen()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deFreeze_shouldDoNothing_whenAccountIsActivated()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deposit_shouldHandleMaxLongValue()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deposit_shouldIncreaseBalance_whenAccountIsActive()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deposit_shouldThrowException_whenAccountIsNotActive()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deposit_shouldThrowException_whenAmountIsNegative()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">deposit_shouldThrowException_whenAmountIsZero()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">freeze_shouldChangeStatusToFrozen_whenAccountIsActive()</td>
+<td class="success">0.027s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">freeze_shouldNotChangeStatus_whenAccountIsAlreadyFrozen()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">withdraw_shouldDecreaseBalance_whenAccountIsActiveAndHasSufficientBalance()</td>
+<td class="success">0.001s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">withdraw_shouldHandleMinBalance()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">withdraw_shouldThrowException_whenAccountIsNotActive()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">withdraw_shouldThrowException_whenInsufficientBalance()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>[2025-01-22 01:47:45.580][Test worker][INFO ][Account:92][][] [aid:null]freeze
+[2025-01-22 01:47:45.604][Test worker][INFO ][Account:77][][] [aid:null]withdraw amount: 400, current balance: 600
+[2025-01-22 01:47:45.606][Test worker][INFO ][Account:69][][] [aid:null]deposit amount: 500, current balance: 9223372036854775807
+[2025-01-22 01:47:45.610][Test worker][INFO ][Account:110][][] [aid:null]activate
+[2025-01-22 01:47:45.610][Test worker][INFO ][Account:77][][] [aid:null]withdraw amount: 500, current balance: 0
+[2025-01-22 01:47:45.611][Test worker][INFO ][Account:69][][] [aid:null]deposit amount: 500, current balance: 1500
+[2025-01-22 01:47:45.614][Test worker][INFO ][Account:101][][] [aid:null]deFreeze
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.11.1</a> at 2025年1月22日 上午1:48:35</p>
+</div>
+</div>
+</body>
+</html>

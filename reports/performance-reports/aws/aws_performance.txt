@@ -1,0 +1,35 @@
+开始执行场景：deposit 的性能测试...
+Running 10s test @ http://k8s-default-rbcs-02495c7571-041c1e0a2184a86f.elb.ap-northeast-1.amazonaws.com
+  30 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   194.98ms  194.66ms   4.85s    99.19%
+    Req/Sec    16.40      6.73    30.00     74.44%
+  4814 requests in 10.07s, 1.29MB read
+  Non-2xx or 3xx responses: 682
+Requests/sec:    477.86
+Transfer/sec:    131.02KB
+场景：deposit 的性能测试完成。
+
+开始执行场景：deposit 的性能测试...
+Running 10s test @ http://k8s-default-rbcs-02495c7571-041c1e0a2184a86f.elb.ap-northeast-1.amazonaws.com
+  30 threads and 300 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   514.99ms  171.02ms   1.55s    69.74%
+    Req/Sec    19.53     11.11    60.00     84.91%
+  5412 requests in 10.09s, 1.45MB read
+  Non-2xx or 3xx responses: 763
+Requests/sec:    536.42
+Transfer/sec:    147.13KB
+场景：deposit 的性能测试完成。
+
+开始执行场景：deposit 的性能测试...
+Running 10s test @ http://k8s-default-rbcs-02495c7571-041c1e0a2184a86f.elb.ap-northeast-1.amazonaws.com
+  50 threads and 500 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   714.78ms  310.96ms   2.21s    69.66%
+    Req/Sec    14.24      9.48    70.00     73.69%
+  5483 requests in 10.08s, 1.47MB read
+  Non-2xx or 3xx responses: 756
+Requests/sec:    543.93
+Transfer/sec:    149.39KB
+场景：deposit 的性能测试完成。

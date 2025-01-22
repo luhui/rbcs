@@ -86,7 +86,6 @@ graph TB
     subgraph AWS Cloud
 		    ELB[Elastic Load Balencing]
         subgraph EKS Cluster
-            API[API Gateway]
             TS[RBCS Service]
         end
 

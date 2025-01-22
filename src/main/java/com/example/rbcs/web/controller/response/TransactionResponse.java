@@ -12,7 +12,7 @@ public class TransactionResponse {
     private long amount;
     private String status;
     private String failureReason;;
-
+    private String type;
     private Date createdAt;
     private Date updatedAt;
 }

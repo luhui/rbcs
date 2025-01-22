@@ -11,10 +11,16 @@ public interface TransactionMapper {
     @Mapping(source = "sourceAccount.id", target = "sourceAccountId")
     @Mapping(source = "targetAccount.id", target = "targetAccountId")
     @Mapping(source = "status", target = "status", qualifiedByName = "transactionStatusToString")
+    @Mapping(source = "type", target = "type", qualifiedByName = "transactionTypeToString")
     TransactionResponse toResponse(Transaction transaction);
 
      @Named("transactionStatusToString")
      default String transactionStatusToString(Transaction.Status status) {
          return status != null ? status.name() : null;
      }
+
+    @Named("transactionTypeToString")
+    default String transactionStatusToString(Transaction.Type type) {
+        return type != null ? type.name() : null;
+    }
 }

@@ -92,7 +92,7 @@ graph TB
 
         subgraph Data Layer
             RDS[(AWS RDS)]
-            Redis[(ElastiCache)]
+            EC[(ElastiCache ValKey)]
             SQS[Amazon SQS]
         end
     end
@@ -101,7 +101,7 @@ graph TB
 
     TS --> RDS
 
-    TS --> ValKey
+    TS --> EC
 
     TS --> SQS
 ```

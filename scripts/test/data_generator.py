@@ -1,6 +1,7 @@
 import argparse
 import random
 import mysql.connector
+import uuid
 from datetime import datetime
 from mysql.connector import Error
 
@@ -8,7 +9,7 @@ def generate_accounts(num_records):
     accounts = []
 
     for i in range(num_records):
-        account_number = random.randint(100000000, 999999999)
+        account_number = str(uuid.uuid4())
         balance = random.randint(100, 1000000)
         create_at = updated_at = datetime.now()
         status = 'ACTIVATED'
@@ -72,7 +73,7 @@ def main():
         'user': args.user,
         'password': args.password
     }
-
+    
     accounts = generate_accounts(args.count)
     insert_data(db_config, accounts)
 

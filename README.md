@@ -5,7 +5,7 @@
 选择DDD的简洁架构（clean architecture），基于springboot进行实现
 
 其程序框架如下： 
-[image](./doc/img/clean_architecture.png)
+![clean architecture](./doc/img/clean_architecture.png)
 
 基本的约束是内层禁止依赖外层，必须依赖的场景，通过依赖导致来实现。可参考instructure中的sqs实现
 
